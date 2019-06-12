@@ -28,10 +28,10 @@
                     <th scope="row" v-else>{{hr}}:00</th>
 
                     <td v-for="slot in days">
-                        <button type="button" class="btn btn-danger btn-sm" v-if="slot.user != '' && slot.user.id != $auth.user().id && canUnclaimDjSlot" @click="claim(slot.time, true, slot.user.id)">{{slot.user.name}}</button>
-                        <span v-else-if="slot.user != '' && slot.user.id != $auth.user().id || (slot.time * 1000) <= new Date().getTime()">{{slot.user.name}}</span>
-                        <button type="button" class="btn btn-danger btn-sm" v-can:claim="'slot'" v-else-if="slot.user.id == $auth.user().id" @click="claim(slot.time, true)">Unclaim</button>
-                        <button type="button" class="btn btn-primary btn-sm" v-can:unclaim="'slot'" v-else @click="claim(slot.time)">Claim</button>
+                        <button type="button" class="btn btn-danger btn-sm" v-if="slot.user != null && slot.user.id != $auth.user().id && canUnclaimDjSlot" @click="claim(slot.time, true, slot.user.id)">{{slot.user.name}}</button>
+                        <button type="button" class="btn btn-danger btn-sm" v-else-if="slot.user != null && slot.user.id == $auth.user().id && (slot.time * 1000) > new Date().getTime() && canUnclaimSlot" @click="claim(slot.time, true)">Unclaim</button>
+                        <button type="button" class="btn btn-primary btn-sm" v-else-if="slot.user == null && (slot.time * 1000) > new Date().getTime() && canClaimSlot" @click="claim(slot.time)">Claim</button>
+                        <span v-else>{{slot.user ? slot.user.name : ''}}</span>
                     </td>
                 </tr>
             </tbody>
@@ -49,7 +49,9 @@
                 interval: null,
                 users: [],
                 claimUser: "",
-                canUnclaimDjSlot: false
+                canUnclaimDjSlot: false,
+                canUnclaimSlot: false,
+                canClaimSlot: false
             }
         },
 
@@ -112,6 +114,12 @@
             });
             this.getTimetable();
             this.interval = setInterval(() => this.getTimetable(), 20000);
+            this.canClaimSlot = this.$auth.user().role.perms.find(perm => {
+                return (perm.name == "claim.slot" || perm.name == "all");
+            });
+            this.canUnclaimSlot = this.$auth.user().role.perms.find(perm => {
+                return (perm.name == "unclaim.slot" || perm.name == "all");
+            });
             this.canUnclaimDjSlot = this.$auth.user().role.perms.find(perm => {
                 return (perm.name == "unclaim.dj.slot" || perm.name == "all");
             });

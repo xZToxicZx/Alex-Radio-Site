@@ -32,7 +32,7 @@ class TimetableController extends Controller
             $daySlots = [];
             for ($day=0; $day < 7; $day++) {
                 $currentDate = strtotime('+'.$day.' DAYS +'.$hour.' HOURS', $dateFrom);
-                $user = "";
+                $user = NULL;
                 foreach ($slots as $slot) {
                     if ($slot->timestamp == $currentDate) {
                         $user = ['id' => $slot->user->id, 'name' => $slot->user->name];
