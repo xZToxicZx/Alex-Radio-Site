@@ -30,7 +30,7 @@
                     <td v-for="slot in days">
                         <button type="button" class="btn btn-danger btn-sm" v-if="slot.user != null && slot.user.id != $auth.user().id && canUnclaimDjSlot" @click="claim(slot.time, true, slot.user.id)">{{slot.user.name}}</button>
                         <button type="button" class="btn btn-danger btn-sm" v-else-if="slot.user != null && slot.user.id == $auth.user().id && (slot.time * 1000) > new Date().getTime() && canUnclaimSlot" @click="claim(slot.time, true)">Unclaim</button>
-                        <button type="button" class="btn btn-primary btn-sm" v-else-if="slot.user == null && (slot.time * 1000) > new Date().getTime() && canClaimSlot" @click="claim(slot.time)">Claim</button>
+                        <button type="button" class="btn btn-primary btn-sm" v-else-if="slot.user == null && canClaimSlot" @click="claim(slot.time)">Claim</button>
                         <span v-else>{{slot.user ? slot.user.name : ''}}</span>
                     </td>
                 </tr>
