@@ -11,6 +11,4 @@
 |
 */
 
-Route::get('/{any?}', function () {
-    return view('layouts.app');
-})->where('any', '^(?!api\/)[\/\w\.-]*');
+Route::view('/{any?}', 'layouts.app')->where('any', '^(?!api\/)[\/\w\.-]*');
