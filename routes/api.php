@@ -78,10 +78,6 @@ Route::prefix('v1')->group(function ()
     });
 
     Route::prefix('radio')->group(function () {
-        Route::get('listeners', function () {
-            $json = file_get_contents('https://source.treehouseradios.com:8000/status-json.xsl');
-            $resp = json_decode($json);
-            return response()->json(['listeners' => $resp->icestats->source->listeners]);
-        });
+        Route::get('listeners', "StatsController@listeners");
     });
 });
