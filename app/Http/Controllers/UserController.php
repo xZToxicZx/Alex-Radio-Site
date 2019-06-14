@@ -16,12 +16,7 @@ class UserController extends Controller
         if (!AuthController::hasPerm('view.panel.users') || !AuthController::hasPerm('claim.dj.slot'))
             return response()->json(['status' => 'err', 'users' => []]);
 
-        $users = User::with('role')->get();
-
-        foreach ($users as $user) {
-            $user->role->perms;
-            $user->makeHidden(['role_id']);
-        }
+        $users = User::with('role.perms')->get();
 
         return response()->json([ 'status' => 'success', 'users' => $users->toArray() ]);
     }

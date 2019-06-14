@@ -22,7 +22,7 @@ class TimetableController extends Controller
         $cDateFrom = CarbonImmutable::now('+'.$userOffset.':00')->addWeeks($req->weekOffset)->startOfWeek();
         $selectedWeek = $cDateFrom->format('l jS F y').' - '.$cDateFrom->endOfWeek()->format('l jS F y');
 
-        $slots = TimetableSlot::whereBetween('timestamp', [$cDateFrom->timestamp, $cDateFrom->endOfWeek()->timestamp])->get();
+        $slots = TimetableSlot::with('user')->whereBetween('timestamp', [$cDateFrom->timestamp, $cDateFrom->endOfWeek()->timestamp])->get();
 
         for ($hour=0; $hour < 24; $hour++) {
             $daySlots = [];
