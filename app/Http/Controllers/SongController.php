@@ -10,10 +10,10 @@ class SongController extends Controller
 {
     public function current()
     {
-        $json = file_get_contents('http://5.226.143.148:8001/stats?sid=1&json=1');
+        $client = new Client();
+        $json = $client->get('http://5.226.143.148:8001/stats?sid=1&json=1')->getBody();
         $json = json_decode($json, true);
         $song = explode(' - ', $json['songtitle']);
-        $client = new Client();
         $token;
         if (!Cache::has('spotifyToken'))
         {
@@ -46,10 +46,10 @@ class SongController extends Controller
 
     public function recent()
     {
-        $json = file_get_contents('http://5.226.143.148:8001/admin.cgi?sid=1&pass=4k0$ZF2Gw*3f&mode=viewjson&page=4');
-        $songs = json_decode($json, true);
         $retsongs = [];
         $client = new Client();
+        $json = $client->get('http://5.226.143.148:8001/admin.cgi?sid=1&pass=4k0$ZF2Gw*3f&mode=viewjson&page=4');
+        $songs = json_decode($json->getBody());
         $token;
 
         if (!Cache::has('spotifyToken'))
@@ -74,7 +74,7 @@ class SongController extends Controller
 
 
         foreach ($songs as $key => $song) {
-            $song = explode(' - ', $song['title']);
+            $song = explode(' - ', $song->title);
             if (!isset($song[1]))
             {
                 $song[1] = $song[0];
