@@ -20,10 +20,13 @@
             </thead>
             <tbody>
                 <tr v-for="(slotsr, hr) in slots">
-                   <th scope="row" v-if="hr.toString().length < 2">0{{hr}}:00</th>
-                   <th scope="row" v-else>{{hr}}:00</th>
+                    <th scope="row" v-if="hr.toString().length < 2">0{{hr}}:00</th>
+                    <th scope="row" v-else>{{hr}}:00</th>
 
-                   <td v-for="slot in slotsr">{{slot.user.name}}</td>
+                    <td v-for="slot in slotsr">
+                        <span v-if="slot.user">{{slot.user.name}}</span>
+                        <span v-else></span>
+                    </td>
                 </tr>
             </tbody>
         </table>

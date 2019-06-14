@@ -16,28 +16,20 @@ class UserController extends Controller
         if (!AuthController::hasPerm('view.panel.users') || !AuthController::hasPerm('claim.dj.slot'))
             return response()->json(['status' => 'err', 'users' => []]);
 
-        $users = User::all();
+        $users = User::with('role')->get();
 
         foreach ($users as $user) {
             $user->role->perms;
             $user->makeHidden(['role_id']);
         }
 
-        return response()->json(
-            [
-                'status' => 'success',
-                'users' => $users->toArray()
-            ], 200);
+        return response()->json([ 'status' => 'success', 'users' => $users->toArray() ]);
     }
 
     public function show(Request $request, $id)
     {
         $user = User::find($id);
-        return response()->json(
-            [
-                'status' => 'success',
-                'user' => $user->toArray()
-            ], 200);
+        return response()->json([ 'status' => 'success', 'user' => $user->toArray() ]);
     }
 
     public function update(Request $req)
@@ -68,20 +60,13 @@ class UserController extends Controller
             $user->update($updates);
             return response()->json(['status' => 'success', 'user' => $user->refresh()->toArray()]);
         } else {
-            $v = $req->validate([
-                'name'  => 'min:3',
-                'email' => 'email|unique:users,email,'.$req->id
-            ]);
+            $v = $req->validate([ 'name'  => 'min:3', 'email' => 'email|unique:users,email,'.$req->id ]);
 
             $user = User::find($req->id);
             $user->update($req->all());
 
-            $users = User::all();
+            $users = User::with('role')->get();
 
-            foreach ($users as $user) {
-                $user->role;
-                $user->makeHidden(['role_id']);
-            }
             return response()->json(['status' => 'success', 'users' => $users]);
         }
     }
@@ -95,12 +80,8 @@ class UserController extends Controller
 
         User::destroy($req->id);
 
-        $users = User::all();
+        $users = User::with('role')->get();
 
-        foreach ($users as $user) {
-            $user->role;
-            $user->makeHidden(['role_id']);
-        }
         return response()->json(['status' => 'success', 'users' => $users]);
     }
 }
