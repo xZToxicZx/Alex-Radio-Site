@@ -27,6 +27,9 @@
                             <router-link class="nav-link" to="team">Team</router-link>
                         </li>
                         <li class="nav-item align-self-center">
+                            <router-link class="nav-link" to="dannyb">DannyB</router-link>
+                        </li>
+                        <li class="nav-item align-self-center">
                             <router-link class="nav-link" to="schedule">Schedule</router-link>
                         </li>
                         <li class="nav-item align-self-center">

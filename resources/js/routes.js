@@ -32,6 +32,15 @@ let routes = [
         }
     },
     {
+        path: '/dannyb',
+
+        component: require('./views/main/dannyb.vue').default,
+
+        meta: {
+            auth: undefined
+        }
+    },
+    {
         path: '/partners',
 
         component: require('./views/main/partners.vue').default,
